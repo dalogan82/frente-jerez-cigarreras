@@ -1,51 +1,72 @@
-﻿import React, { useEffect } from "react";
-import { View, Text, Image, StyleSheet } from "react-native";
+﻿import React from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import { Asset } from "expo-asset";
-import { StatusBar } from "expo-status-bar";
-
-// 👇 Importa tus pantallas
-// import HomeScreen from "./screens/HomeScreen";
-// import AnotherScreen from "./screens/AnotherScreen";
+import { View, Text, Button, Image, StyleSheet } from "react-native";
 
 const Stack = createNativeStackNavigator();
 
-export default function App() {
-  // ✅ Precarga las imágenes para que se incluyan en el bundle web (Render)
-  useEffect(() => {
-    const images = [
-      require("./assets/icon.png"),
-      require("./assets/adaptive-icon.png"),
-      require("./assets/splash.png"),
-    ];
-    images.forEach((img) => Asset.fromModule(img).downloadAsync());
-  }, []);
+function HomeScreen({ navigation }) {
+  return (
+    <View style={styles.container}>
+      <Image
+        source={require("./assets/icon.png")}
+        style={styles.icon}
+        resizeMode="contain"
+      />
+      <Text style={styles.title}>🎺 Frente Jerez App 🎺</Text>
+      <Text style={styles.subtitle}>
+        Bienvenido a la aplicación del Frente Jerez “Las Cigarreras”
+      </Text>
 
+      <View style={{ marginTop: 30 }}>
+        <Button
+          title="Entrar al Módulo de Noticias"
+          onPress={() => navigation.navigate("Noticias")}
+          color="#800080"
+        />
+      </View>
+    </View>
+  );
+}
+
+function NoticiasScreen({ navigation }) {
+  return (
+    <View style={styles.container}>
+      <Text style={styles.title}>📰 Noticias</Text>
+      <Text style={styles.subtitle}>
+        Aquí aparecerán las noticias del Frente Jerez.
+      </Text>
+
+      <View style={{ marginTop: 30 }}>
+        <Button
+          title="Volver al Inicio"
+          onPress={() => navigation.navigate("Inicio")}
+          color="#800080"
+        />
+      </View>
+    </View>
+  );
+}
+
+export default function App() {
   return (
     <NavigationContainer>
-      <StatusBar style="dark" />
-
-      {/* 👇 Ejemplo temporal hasta tener tus pantallas */}
-      <View style={styles.container}>
-        <Image
-          source={require("./assets/icon.png")}
-          style={styles.logo}
-          resizeMode="contain"
+      <Stack.Navigator initialRouteName="Inicio">
+        <Stack.Screen
+          name="Inicio"
+          component={HomeScreen}
+          options={{ headerShown: false }}
         />
-        <Text style={styles.title}>Frente Jerez App</Text>
-        <Text style={styles.subtitle}>
-          Bienvenido. App optimizada para Web, iOS y Android.
-        </Text>
-      </View>
-
-      {/* 🔹 Estructura de navegación (descomenta si usas pantallas) */}
-      {/*
-      <Stack.Navigator screenOptions={{ headerShown: false }}>
-        <Stack.Screen name="Home" component={HomeScreen} />
-        <Stack.Screen name="Another" component={AnotherScreen} />
+        <Stack.Screen
+          name="Noticias"
+          component={NoticiasScreen}
+          options={{
+            title: "Noticias",
+            headerStyle: { backgroundColor: "#800080" },
+            headerTintColor: "#fff",
+          }}
+        />
       </Stack.Navigator>
-      */}
     </NavigationContainer>
   );
 }
@@ -53,25 +74,26 @@ export default function App() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: "center",
+    backgroundColor: "#fff",
     alignItems: "center",
-    backgroundColor: "#ffffff",
-    padding: 20,
+    justifyContent: "center",
+    paddingHorizontal: 20,
   },
-  logo: {
-    width: 150,
-    height: 150,
+  icon: {
+    width: 120,
+    height: 120,
     marginBottom: 20,
   },
   title: {
-    fontSize: 24,
+    fontSize: 22,
     fontWeight: "bold",
     color: "#222",
+    textAlign: "center",
   },
   subtitle: {
     fontSize: 16,
-    color: "#555",
+    color: "#444",
     textAlign: "center",
-    marginTop: 8,
+    marginTop: 10,
   },
 });
