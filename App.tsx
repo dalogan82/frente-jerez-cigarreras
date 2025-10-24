@@ -1,9 +1,9 @@
 ﻿import React from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import { View, Text, Button, Image, StyleSheet } from "react-native";
+import { View, Text, TouchableOpacity, Image, StyleSheet } from "react-native";
 
-// Pantallas reales
+// Tus pantallas reales
 import HomeScreen from "./screens/HomeScreen";
 import HistoryScreen from "./screens/HistoryScreen";
 import StatsScreen from "./screens/StatsScreen";
@@ -23,13 +23,12 @@ function StartScreen({ navigation }) {
         Bienvenido a la aplicación del Frente Jerez “Las Cigarreras”
       </Text>
 
-      <View style={{ marginTop: 30 }}>
-        <Button
-          title="Entrar al módulo TRANSPORTE"
-          onPress={() => navigation.navigate("Home")}
-          color="#800080"
-        />
-      </View>
+      <TouchableOpacity
+        style={styles.boton}
+        onPress={() => navigation.navigate("Transporte")}
+      >
+        <Text style={styles.botonTexto}>🚗 Entrar al módulo TRANSPORTE</Text>
+      </TouchableOpacity>
     </View>
   );
 }
@@ -38,7 +37,7 @@ export default function App() {
   return (
     <NavigationContainer>
       <Stack.Navigator initialRouteName="Inicio">
-        {/* Pantalla inicial */}
+        {/* Pantalla de bienvenida */}
         <Stack.Screen
           name="Inicio"
           component={StartScreen}
@@ -47,10 +46,10 @@ export default function App() {
 
         {/* Módulo TRANSPORTE */}
         <Stack.Screen
-          name="Home"
+          name="Transporte"
           component={HomeScreen}
           options={{
-            title: "Módulo Transporte",
+            title: "Transporte",
             headerStyle: { backgroundColor: "#800080" },
             headerTintColor: "#fff",
           }}
@@ -58,7 +57,7 @@ export default function App() {
 
         {/* Historial */}
         <Stack.Screen
-          name="History"
+          name="Historial"
           component={HistoryScreen}
           options={{
             title: "Historial de Actos",
@@ -69,10 +68,10 @@ export default function App() {
 
         {/* Estadísticas */}
         <Stack.Screen
-          name="Stats"
+          name="Estadísticas"
           component={StatsScreen}
           options={{
-            title: "Estadísticas de Conductores",
+            title: "Estadísticas",
             headerStyle: { backgroundColor: "#800080" },
             headerTintColor: "#fff",
           }}
@@ -106,5 +105,18 @@ const styles = StyleSheet.create({
     color: "#444",
     textAlign: "center",
     marginTop: 10,
+    marginBottom: 30,
+  },
+  boton: {
+    backgroundColor: "#800080",
+    paddingVertical: 14,
+    paddingHorizontal: 30,
+    borderRadius: 10,
+  },
+  botonTexto: {
+    color: "#fff",
+    fontSize: 16,
+    fontWeight: "bold",
+    textAlign: "center",
   },
 });
