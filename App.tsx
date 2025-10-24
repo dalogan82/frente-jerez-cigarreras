@@ -44,7 +44,7 @@ export default function App() {
           options={{ headerShown: false }}
         />
 
-        {/* Módulo TRANSPORTE */}
+        {/* TRANSPORTE */}
         <Stack.Screen
           name="Transporte"
           component={HomeScreen}
@@ -60,7 +60,7 @@ export default function App() {
           name="Historial"
           component={HistoryScreen}
           options={{
-            title: "Historial de Actos",
+            title: "Historial de Desplazamientos",
             headerStyle: { backgroundColor: "#800080" },
             headerTintColor: "#fff",
           }}
