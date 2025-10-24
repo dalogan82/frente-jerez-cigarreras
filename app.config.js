@@ -6,35 +6,42 @@
     orientation: "portrait",
     icon: "./assets/icon.png",
     userInterfaceStyle: "light",
+
     splash: {
       image: "./assets/splash.png",
       resizeMode: "contain",
       backgroundColor: "#ffffff"
     },
+
     assetBundlePatterns: ["**/*"],
+
     ios: {
       supportsTablet: true,
-      bundleIdentifier: "com.dalogan.frentejerezapp"
+      bundleIdentifier: "com.dalogan.frentejerezapp",
+      buildNumber: "1"
     },
+
     android: {
       adaptiveIcon: {
         foregroundImage: "./assets/adaptive-icon.png",
         backgroundColor: "#ffffff"
       },
-      package: "com.dalogan.frentejerezapp"
+      package: "com.dalogan.frentejerezapp",
+      versionCode: 1
     },
+
     web: {
       favicon: "./assets/favicon.png"
     },
 
-    // 👇 Esta parte es la que EAS necesita para funcionar correctamente
+    // 👇 Nuevo projectId correcto
     extra: {
       eas: {
-        projectId: "c4ace6cc-704c-44c1-b2c6-80b4bd9abc94"
+        projectId: "9e52578c-8169-475e-817b-fa5f92eb6671"
       }
     },
 
-    // (Opcional, pero útil para evitar problemas de arquitectura)
+    // 👇 Evita el error 'PlatformConstants could not be found'
     experiments: {
       turboModules: false,
       concurrentRoot: false
