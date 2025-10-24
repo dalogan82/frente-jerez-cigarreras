@@ -31,13 +31,14 @@
     },
 
     web: {
-      favicon: "./assets/favicon.png",
       bundler: "metro",
+      favicon: "./assets/favicon.png",
       name: "Frente Jerez App",
       shortName: "FrenteJerez",
+      display: "standalone",
       backgroundColor: "#ffffff",
-      themeColor: "#ffffff",
-      webManifest: "./manifest.json"
+      themeColor: "#800080",
+      orientation: "portrait"
     },
 
     extra: {
@@ -46,7 +47,6 @@
       }
     },
 
-    // 🚫 Evita errores de TurboModules en iOS recientes y Expo Web
     experiments: {
       turboModules: false,
       concurrentRoot: false
