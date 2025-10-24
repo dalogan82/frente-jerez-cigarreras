@@ -51,7 +51,7 @@ function SplashScreen({ navigation }) {
   );
 }
 
-/* --- Pantalla principal con el botón TRANSPORTE --- */
+/* --- Pantalla principal con el botón COCHE --- */
 function StartScreen({ navigation }) {
   const scaleAnim = useRef(new Animated.Value(1)).current;
   const { width } = useWindowDimensions();
@@ -73,7 +73,7 @@ function StartScreen({ navigation }) {
       speed: 50,
       bounciness: 6,
     }).start();
-    navigation.navigate("Transporte");
+    navigation.navigate("Coche");
   };
 
   return (
@@ -94,7 +94,7 @@ function StartScreen({ navigation }) {
         onPressOut={handlePressOut}
       >
         <Animated.View style={[styles.boton, { transform: [{ scale: scaleAnim }] }]}>
-          <Text style={styles.botonTexto}>🚗 TRANSPORTE</Text>
+          <Text style={styles.botonTexto}>🚗 COCHE</Text>
         </Animated.View>
       </TouchableWithoutFeedback>
     </View>
@@ -108,7 +108,7 @@ export default function App() {
       <Stack.Navigator initialRouteName="Splash" screenOptions={{ animation: "fade" }}>
         <Stack.Screen name="Splash" component={SplashScreen} options={{ headerShown: false }} />
         <Stack.Screen name="Inicio" component={StartScreen} options={{ headerShown: false }} />
-        <Stack.Screen name="Transporte" component={HomeScreen} options={{ headerShown: false }} />
+        <Stack.Screen name="Coche" component={HomeScreen} options={{ headerShown: false }} />
         <Stack.Screen
           name="Historial"
           component={HistoryScreen}
