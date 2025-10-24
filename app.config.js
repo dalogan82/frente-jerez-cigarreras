@@ -31,17 +31,22 @@
     },
 
     web: {
-      favicon: "./assets/favicon.png"
+      favicon: "./assets/favicon.png",
+      bundler: "metro",
+      name: "Frente Jerez App",
+      shortName: "FrenteJerez",
+      backgroundColor: "#ffffff",
+      themeColor: "#ffffff",
+      webManifest: "./manifest.json"
     },
 
-    // 👇 Nuevo projectId correcto
     extra: {
       eas: {
         projectId: "9e52578c-8169-475e-817b-fa5f92eb6671"
       }
     },
 
-    // 👇 Evita el error 'PlatformConstants could not be found'
+    // 🚫 Evita errores de TurboModules en iOS recientes y Expo Web
     experiments: {
       turboModules: false,
       concurrentRoot: false
