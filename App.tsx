@@ -25,8 +25,8 @@ function StartScreen({ navigation }) {
 
       <View style={{ marginTop: 30 }}>
         <Button
-          title="Entrar al módulo COCHE"
-          // 👇 Aquí decides a qué pantalla va
+          title="Entrar al módulo TRANSPORTE"
+          // 👇 Cambia “Stats” por “History” si esa es la pantalla correcta
           onPress={() => navigation.navigate("Stats")}
           color="#800080"
         />
@@ -39,7 +39,7 @@ export default function App() {
   return (
     <NavigationContainer>
       <Stack.Navigator initialRouteName="Inicio">
-        {/* Pantalla de bienvenida */}
+        {/* Pantalla principal de bienvenida */}
         <Stack.Screen
           name="Inicio"
           component={StartScreen}
@@ -61,7 +61,7 @@ export default function App() {
           name="Stats"
           component={StatsScreen}
           options={{
-            title: "Módulo Coche",
+            title: "Módulo Transporte",
             headerStyle: { backgroundColor: "#800080" },
             headerTintColor: "#fff",
           }}
