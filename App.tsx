@@ -20,8 +20,8 @@ function HomeScreen({ navigation }) {
 
       <View style={{ marginTop: 30 }}>
         <Button
-          title="Entrar al Módulo de Noticias"
-          onPress={() => navigation.navigate("Noticias")}
+          title="Entrar al módulo COCHE"
+          onPress={() => navigation.navigate("Coche")}
           color="#800080"
         />
       </View>
@@ -29,17 +29,17 @@ function HomeScreen({ navigation }) {
   );
 }
 
-function NoticiasScreen({ navigation }) {
+function CocheScreen({ navigation }) {
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>📰 Noticias</Text>
+      <Text style={styles.title}>🚗 Módulo COCHE</Text>
       <Text style={styles.subtitle}>
-        Aquí aparecerán las noticias del Frente Jerez.
+        Aquí irá la información sobre conductores y desplazamientos.
       </Text>
 
       <View style={{ marginTop: 30 }}>
         <Button
-          title="Volver al Inicio"
+          title="Volver al inicio"
           onPress={() => navigation.navigate("Inicio")}
           color="#800080"
         />
@@ -58,10 +58,10 @@ export default function App() {
           options={{ headerShown: false }}
         />
         <Stack.Screen
-          name="Noticias"
-          component={NoticiasScreen}
+          name="Coche"
+          component={CocheScreen}
           options={{
-            title: "Noticias",
+            title: "Módulo Coche",
             headerStyle: { backgroundColor: "#800080" },
             headerTintColor: "#fff",
           }}
