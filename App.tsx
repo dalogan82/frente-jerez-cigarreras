@@ -1,9 +1,15 @@
-﻿import React from "react";
+﻿import React, { useRef } from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import { View, Text, TouchableOpacity, Image, StyleSheet } from "react-native";
+import {
+  View,
+  Text,
+  TouchableWithoutFeedback,
+  Animated,
+  Image,
+  StyleSheet,
+} from "react-native";
 
-// Importa tus pantallas reales
 import HomeScreen from "./screens/HomeScreen";
 import HistoryScreen from "./screens/HistoryScreen";
 import StatsScreen from "./screens/StatsScreen";
@@ -11,6 +17,27 @@ import StatsScreen from "./screens/StatsScreen";
 const Stack = createNativeStackNavigator();
 
 function StartScreen({ navigation }) {
+  const scaleAnim = useRef(new Animated.Value(1)).current;
+
+  const handlePressIn = () => {
+    Animated.spring(scaleAnim, {
+      toValue: 0.95,
+      useNativeDriver: true,
+      speed: 50,
+      bounciness: 6,
+    }).start();
+  };
+
+  const handlePressOut = () => {
+    Animated.spring(scaleAnim, {
+      toValue: 1,
+      useNativeDriver: true,
+      speed: 50,
+      bounciness: 6,
+    }).start();
+    navigation.navigate("Transporte");
+  };
+
   return (
     <View style={styles.container}>
       <Image
@@ -24,13 +51,14 @@ function StartScreen({ navigation }) {
         Bienvenido a la aplicación del Frente Jerez “Las Cigarreras”
       </Text>
 
-      <TouchableOpacity
-        style={styles.boton}
-        onPress={() => navigation.navigate("Transporte")}
-        activeOpacity={0.8}
+      <TouchableWithoutFeedback
+        onPressIn={handlePressIn}
+        onPressOut={handlePressOut}
       >
-        <Text style={styles.botonTexto}>🚗 TRANSPORTE</Text>
-      </TouchableOpacity>
+        <Animated.View style={[styles.boton, { transform: [{ scale: scaleAnim }] }]}>
+          <Text style={styles.botonTexto}>🚗 TRANSPORTE</Text>
+        </Animated.View>
+      </TouchableWithoutFeedback>
     </View>
   );
 }
@@ -39,23 +67,20 @@ export default function App() {
   return (
     <NavigationContainer>
       <Stack.Navigator initialRouteName="Inicio">
-        {/* Pantalla de bienvenida */}
         <Stack.Screen
           name="Inicio"
           component={StartScreen}
           options={{ headerShown: false }}
         />
 
-        {/* Módulo TRANSPORTE */}
         <Stack.Screen
           name="Transporte"
           component={HomeScreen}
           options={{
-            headerShown: false, // 🔥 sin barra superior
+            headerShown: false,
           }}
         />
 
-        {/* Historial */}
         <Stack.Screen
           name="Historial"
           component={HistoryScreen}
@@ -66,7 +91,6 @@ export default function App() {
           }}
         />
 
-        {/* Estadísticas */}
         <Stack.Screen
           name="Estadísticas"
           component={StatsScreen}
@@ -116,7 +140,7 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
-    elevation: 5, // Android
+    elevation: 5,
   },
   botonTexto: {
     color: "#fff",
