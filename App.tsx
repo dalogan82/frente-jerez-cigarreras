@@ -3,9 +3,14 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { View, Text, Button, Image, StyleSheet } from "react-native";
 
+// 👇 Importa tus pantallas reales
+import HomeScreen from "./screens/HomeScreen";
+import HistoryScreen from "./screens/HistoryScreen";
+import StatsScreen from "./screens/StatsScreen";
+
 const Stack = createNativeStackNavigator();
 
-function HomeScreen({ navigation }) {
+function StartScreen({ navigation }) {
   return (
     <View style={styles.container}>
       <Image
@@ -21,26 +26,8 @@ function HomeScreen({ navigation }) {
       <View style={{ marginTop: 30 }}>
         <Button
           title="Entrar al módulo COCHE"
-          onPress={() => navigation.navigate("Coche")}
-          color="#800080"
-        />
-      </View>
-    </View>
-  );
-}
-
-function CocheScreen({ navigation }) {
-  return (
-    <View style={styles.container}>
-      <Text style={styles.title}>🚗 Módulo COCHE</Text>
-      <Text style={styles.subtitle}>
-        Aquí irá la información sobre conductores y desplazamientos.
-      </Text>
-
-      <View style={{ marginTop: 30 }}>
-        <Button
-          title="Volver al inicio"
-          onPress={() => navigation.navigate("Inicio")}
+          // 👇 Aquí decides a qué pantalla va
+          onPress={() => navigation.navigate("Stats")}
           color="#800080"
         />
       </View>
@@ -52,14 +39,27 @@ export default function App() {
   return (
     <NavigationContainer>
       <Stack.Navigator initialRouteName="Inicio">
+        {/* Pantalla de bienvenida */}
         <Stack.Screen
           name="Inicio"
-          component={HomeScreen}
+          component={StartScreen}
           options={{ headerShown: false }}
         />
+
+        {/* Tus pantallas reales */}
         <Stack.Screen
-          name="Coche"
-          component={CocheScreen}
+          name="Home"
+          component={HomeScreen}
+          options={{ title: "Inicio" }}
+        />
+        <Stack.Screen
+          name="History"
+          component={HistoryScreen}
+          options={{ title: "Historial" }}
+        />
+        <Stack.Screen
+          name="Stats"
+          component={StatsScreen}
           options={{
             title: "Módulo Coche",
             headerStyle: { backgroundColor: "#800080" },
