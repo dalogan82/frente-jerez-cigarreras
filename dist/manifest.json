@@ -1,0 +1,27 @@
+{
+  "short_name": "FrenteJerez",
+  "name": "Frente Jerez App",
+  "description": "App oficial del Frente Jerez 'Las Cigarreras'. Optimizada para web, iOS y Android.",
+  "start_url": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#ffffff",
+  "theme_color": "#800080",
+  "icons": [
+    {
+      "src": "./assets/icon.png",
+      "type": "image/png",
+      "sizes": "512x512"
+    },
+    {
+      "src": "./assets/adaptive-icon.png",
+      "type": "image/png",
+      "sizes": "192x192"
+    },
+    {
+      "src": "./assets/favicon.png",
+      "type": "image/png",
+      "sizes": "32x32"
+    }
+  ]
+}
