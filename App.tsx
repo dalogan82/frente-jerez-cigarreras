@@ -3,7 +3,7 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { View, Text, Button, Image, StyleSheet } from "react-native";
 
-// 👇 Importa tus pantallas reales
+// Pantallas reales
 import HomeScreen from "./screens/HomeScreen";
 import HistoryScreen from "./screens/HistoryScreen";
 import StatsScreen from "./screens/StatsScreen";
@@ -26,8 +26,7 @@ function StartScreen({ navigation }) {
       <View style={{ marginTop: 30 }}>
         <Button
           title="Entrar al módulo TRANSPORTE"
-          // 👇 Cambia “Stats” por “History” si esa es la pantalla correcta
-          onPress={() => navigation.navigate("Stats")}
+          onPress={() => navigation.navigate("Home")}
           color="#800080"
         />
       </View>
@@ -39,29 +38,41 @@ export default function App() {
   return (
     <NavigationContainer>
       <Stack.Navigator initialRouteName="Inicio">
-        {/* Pantalla principal de bienvenida */}
+        {/* Pantalla inicial */}
         <Stack.Screen
           name="Inicio"
           component={StartScreen}
           options={{ headerShown: false }}
         />
 
-        {/* Tus pantallas reales */}
+        {/* Módulo TRANSPORTE */}
         <Stack.Screen
           name="Home"
           component={HomeScreen}
-          options={{ title: "Inicio" }}
+          options={{
+            title: "Módulo Transporte",
+            headerStyle: { backgroundColor: "#800080" },
+            headerTintColor: "#fff",
+          }}
         />
+
+        {/* Historial */}
         <Stack.Screen
           name="History"
           component={HistoryScreen}
-          options={{ title: "Historial" }}
+          options={{
+            title: "Historial de Actos",
+            headerStyle: { backgroundColor: "#800080" },
+            headerTintColor: "#fff",
+          }}
         />
+
+        {/* Estadísticas */}
         <Stack.Screen
           name="Stats"
           component={StatsScreen}
           options={{
-            title: "Módulo Transporte",
+            title: "Estadísticas de Conductores",
             headerStyle: { backgroundColor: "#800080" },
             headerTintColor: "#fff",
           }}
