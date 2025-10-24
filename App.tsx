@@ -1,4 +1,4 @@
-﻿import React, { useRef } from "react";
+﻿import React, { useRef, useEffect } from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import {
@@ -8,6 +8,7 @@ import {
   Animated,
   Image,
   StyleSheet,
+  useWindowDimensions,
 } from "react-native";
 
 import HomeScreen from "./screens/HomeScreen";
@@ -16,8 +17,45 @@ import StatsScreen from "./screens/StatsScreen";
 
 const Stack = createNativeStackNavigator();
 
+/* --- Pantalla de bienvenida (splash animado) --- */
+function SplashScreen({ navigation }) {
+  const fadeAnim = useRef(new Animated.Value(0)).current;
+  const scaleAnim = useRef(new Animated.Value(0.7)).current;
+
+  useEffect(() => {
+    Animated.sequence([
+      Animated.parallel([
+        Animated.timing(fadeAnim, { toValue: 1, duration: 1000, useNativeDriver: true }),
+        Animated.spring(scaleAnim, { toValue: 1, friction: 3, useNativeDriver: true }),
+      ]),
+      Animated.delay(2000),
+    ]).start(() => {
+      navigation.replace("Inicio"); // cambia automáticamente
+    });
+  }, []);
+
+  return (
+    <View style={styles.splashContainer}>
+      <Animated.Image
+        source={require("./assets/icon.png")}
+        style={[
+          styles.splashLogo,
+          { opacity: fadeAnim, transform: [{ scale: scaleAnim }] },
+        ]}
+        resizeMode="contain"
+      />
+      <Animated.Text style={[styles.splashText, { opacity: fadeAnim }]}>
+        Frente Jerez “Las Cigarreras”
+      </Animated.Text>
+    </View>
+  );
+}
+
+/* --- Pantalla principal con el botón TRANSPORTE --- */
 function StartScreen({ navigation }) {
   const scaleAnim = useRef(new Animated.Value(1)).current;
+  const { width } = useWindowDimensions();
+  const logoSize = width < 500 ? 220 : 260;
 
   const handlePressIn = () => {
     Animated.spring(scaleAnim, {
@@ -42,7 +80,7 @@ function StartScreen({ navigation }) {
     <View style={styles.container}>
       <Image
         source={require("./assets/icon.png")}
-        style={styles.icon}
+        style={[styles.icon, { width: logoSize, height: logoSize }]}
         resizeMode="contain"
       />
 
@@ -63,24 +101,14 @@ function StartScreen({ navigation }) {
   );
 }
 
+/* --- Navegación principal --- */
 export default function App() {
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName="Inicio">
-        <Stack.Screen
-          name="Inicio"
-          component={StartScreen}
-          options={{ headerShown: false }}
-        />
-
-        <Stack.Screen
-          name="Transporte"
-          component={HomeScreen}
-          options={{
-            headerShown: false,
-          }}
-        />
-
+      <Stack.Navigator initialRouteName="Splash" screenOptions={{ animation: "fade" }}>
+        <Stack.Screen name="Splash" component={SplashScreen} options={{ headerShown: false }} />
+        <Stack.Screen name="Inicio" component={StartScreen} options={{ headerShown: false }} />
+        <Stack.Screen name="Transporte" component={HomeScreen} options={{ headerShown: false }} />
         <Stack.Screen
           name="Historial"
           component={HistoryScreen}
@@ -90,7 +118,6 @@ export default function App() {
             headerTintColor: "#fff",
           }}
         />
-
         <Stack.Screen
           name="Estadísticas"
           component={StatsScreen}
@@ -105,7 +132,24 @@ export default function App() {
   );
 }
 
+/* --- Estilos --- */
 const styles = StyleSheet.create({
+  splashContainer: {
+    flex: 1,
+    backgroundColor: "#800080",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  splashLogo: {
+    width: 220,
+    height: 220,
+    marginBottom: 20,
+  },
+  splashText: {
+    color: "#fff",
+    fontSize: 20,
+    fontWeight: "bold",
+  },
   container: {
     flex: 1,
     backgroundColor: "#fff",
@@ -114,28 +158,26 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
   },
   icon: {
-    width: 130,
-    height: 130,
-    marginBottom: 20,
+    marginBottom: 35,
   },
   title: {
-    fontSize: 24,
+    fontSize: 26,
     fontWeight: "bold",
     color: "#222",
     textAlign: "center",
   },
   subtitle: {
-    fontSize: 16,
+    fontSize: 17,
     color: "#444",
     textAlign: "center",
     marginTop: 10,
-    marginBottom: 30,
+    marginBottom: 50,
   },
   boton: {
     backgroundColor: "#800080",
-    paddingVertical: 14,
-    paddingHorizontal: 30,
-    borderRadius: 12,
+    paddingVertical: 16,
+    paddingHorizontal: 36,
+    borderRadius: 14,
     shadowColor: "#000",
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.25,
@@ -144,7 +186,7 @@ const styles = StyleSheet.create({
   },
   botonTexto: {
     color: "#fff",
-    fontSize: 16,
+    fontSize: 17,
     fontWeight: "bold",
     textAlign: "center",
   },
