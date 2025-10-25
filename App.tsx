@@ -7,8 +7,55 @@ import HistoryScreen from "./screens/HistoryScreen";
 import StatsScreen from "./screens/StatsScreen";
 import { COLORS } from "./constants/theme";
 
-const RootStack = createNativeStackNavigator();
-const TransporteStack = createNativeStackNavigator();
+const Stack = createNativeStackNavigator();
+
+export default function App() {
+  return (
+    <NavigationContainer>
+      <Stack.Navigator initialRouteName="Inicio">
+        {/* Pantalla inicial morada con el logo */}
+        <Stack.Screen
+          name="Inicio"
+          component={InicioScreen}
+          options={{ headerShown: false }}
+        />
+
+        {/* Módulo de transporte */}
+        <Stack.Screen
+          name="Coche"
+          component={HomeScreen}
+          options={{
+            title: "🚗 Coche",
+            headerStyle: { backgroundColor: COLORS.background },
+            headerTintColor: "#fff",
+          }}
+        />
+
+        {/* Historial */}
+        <Stack.Screen
+          name="History"
+          component={HistoryScreen}
+          options={{
+            title: "🕓 Historial",
+            headerStyle: { backgroundColor: COLORS.background },
+            headerTintColor: "#fff",
+          }}
+        />
+
+        {/* Estadísticas */}
+        <Stack.Screen
+          name="Stats"
+          component={StatsScreen}
+          options={{
+            title: "📊 Estadísticas",
+            headerStyle: { backgroundColor: COLORS.background },
+            headerTintColor: "#fff",
+          }}
+        />
+      </Stack.Navigator>
+    </NavigationContainer>
+  );
+}
 
 function InicioScreen({ navigation }) {
   return (
@@ -23,65 +70,11 @@ function InicioScreen({ navigation }) {
 
       <TouchableOpacity
         style={styles.button}
-        onPress={() => navigation.replace("Transporte")}
+        onPress={() => navigation.navigate("Coche")}
       >
         <Text style={styles.buttonText}>🚗 COCHE</Text>
       </TouchableOpacity>
     </View>
-  );
-}
-
-// 🟪 Navegador interno del módulo de transporte
-function TransporteNavigator() {
-  return (
-    <TransporteStack.Navigator initialRouteName="Home">
-      <TransporteStack.Screen
-        name="Home"
-        component={HomeScreen}
-        options={{
-          title: "Transporte",
-          headerStyle: { backgroundColor: COLORS.background },
-          headerTintColor: "#fff",
-        }}
-      />
-      <TransporteStack.Screen
-        name="History"
-        component={HistoryScreen}
-        options={{
-          title: "Historial",
-          headerStyle: { backgroundColor: COLORS.background },
-          headerTintColor: "#fff",
-        }}
-      />
-      <TransporteStack.Screen
-        name="Stats"
-        component={StatsScreen}
-        options={{
-          title: "Estadísticas",
-          headerStyle: { backgroundColor: COLORS.background },
-          headerTintColor: "#fff",
-        }}
-      />
-    </TransporteStack.Navigator>
-  );
-}
-
-export default function App() {
-  return (
-    <NavigationContainer>
-      <RootStack.Navigator initialRouteName="Inicio">
-        <RootStack.Screen
-          name="Inicio"
-          component={InicioScreen}
-          options={{ headerShown: false }}
-        />
-        <RootStack.Screen
-          name="Transporte"
-          component={TransporteNavigator}
-          options={{ headerShown: false }}
-        />
-      </RootStack.Navigator>
-    </NavigationContainer>
   );
 }
 
