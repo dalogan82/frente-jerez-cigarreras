@@ -45,7 +45,7 @@ function InicioScreen({ navigation }: any) {
         style={styles.button}
         onPress={() => navigation.navigate("Home")}
       >
-        <Text style={styles.buttonText}>🚗 Entrar al módulo Coche</Text>
+        <Text style={styles.buttonText}>🚗 Coche</Text>
       </TouchableOpacity>
     </View>
   );

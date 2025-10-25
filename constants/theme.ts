@@ -1,5 +1,5 @@
 ﻿export const COLORS = {
-  background: "#6A038D", // 💜 Fondo del logo
+  background: "#5E1381", // 💜 Fondo del logo
   gold: "#FFD700",       // 🎺 Dorado del logo
   white: "#FFFFFF",
   muted: "#E0E0E0",
