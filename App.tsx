@@ -1,13 +1,13 @@
 ﻿import React from "react";
 import { NavigationContainer } from "@react-navigation/native";
-import { createStackNavigator } from "@react-navigation/stack";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { View, Text, Image, StyleSheet, TouchableOpacity } from "react-native";
 import HomeScreen from "./screens/HomeScreen";
 import HistoryScreen from "./screens/HistoryScreen";
 import StatsScreen from "./screens/StatsScreen";
 import { COLORS } from "./constants/theme";
 
-const Stack = createStackNavigator();
+const Stack = createNativeStackNavigator();
 
 export default function App() {
   return (
@@ -20,7 +20,7 @@ export default function App() {
           options={{ headerShown: false }}
         />
 
-        {/* Pantallas principales */}
+        {/* Módulo principal */}
         <Stack.Screen
           name="Coche"
           component={HomeScreen}
@@ -77,7 +77,7 @@ function InicioScreen({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#5E1381", // Color exacto del logo, forzado
+    backgroundColor: "#5E1381",
     alignItems: "center",
     justifyContent: "center",
     paddingHorizontal: 20,
@@ -90,7 +90,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 26,
     fontWeight: "bold",
-    color: "#FFD700", // Dorado
+    color: "#FFD700",
     textAlign: "center",
   },
   subtitle: {
