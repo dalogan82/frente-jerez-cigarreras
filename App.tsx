@@ -7,7 +7,8 @@ import HistoryScreen from "./screens/HistoryScreen";
 import StatsScreen from "./screens/StatsScreen";
 import { COLORS } from "./constants/theme";
 
-const Stack = createNativeStackNavigator();
+const RootStack = createNativeStackNavigator();
+const TransporteStack = createNativeStackNavigator();
 
 function InicioScreen({ navigation }) {
   return (
@@ -17,13 +18,12 @@ function InicioScreen({ navigation }) {
         style={styles.icon}
         resizeMode="contain"
       />
-
       <Text style={styles.title}>🎺 Frente Jerez App 🎺</Text>
       <Text style={styles.subtitle}>“Las Cigarreras”</Text>
 
       <TouchableOpacity
         style={styles.button}
-        onPress={() => navigation.replace("Transporte")} // ✅ Usa replace para ir al módulo principal
+        onPress={() => navigation.replace("Transporte")}
       >
         <Text style={styles.buttonText}>🚗 COCHE</Text>
       </TouchableOpacity>
@@ -31,12 +31,10 @@ function InicioScreen({ navigation }) {
   );
 }
 
-// ✅ Grupo interno de pantallas del módulo de transporte
+// 🟪 Navegador interno del módulo de transporte
 function TransporteNavigator() {
-  const TransporteStack = createNativeStackNavigator();
-
   return (
-    <TransporteStack.Navigator>
+    <TransporteStack.Navigator initialRouteName="Home">
       <TransporteStack.Screen
         name="Home"
         component={HomeScreen}
@@ -71,18 +69,18 @@ function TransporteNavigator() {
 export default function App() {
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName="Inicio">
-        <Stack.Screen
+      <RootStack.Navigator initialRouteName="Inicio">
+        <RootStack.Screen
           name="Inicio"
           component={InicioScreen}
           options={{ headerShown: false }}
         />
-        <Stack.Screen
+        <RootStack.Screen
           name="Transporte"
           component={TransporteNavigator}
-          options={{ headerShown: false }} // ✅ oculta la cabecera doble
+          options={{ headerShown: false }}
         />
-      </Stack.Navigator>
+      </RootStack.Navigator>
     </NavigationContainer>
   );
 }
