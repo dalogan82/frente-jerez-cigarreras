@@ -1,26 +1,26 @@
 ﻿import React from "react";
 import { NavigationContainer } from "@react-navigation/native";
-import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import { createStackNavigator } from "@react-navigation/stack";
 import { View, Text, Image, StyleSheet, TouchableOpacity } from "react-native";
 import HomeScreen from "./screens/HomeScreen";
 import HistoryScreen from "./screens/HistoryScreen";
 import StatsScreen from "./screens/StatsScreen";
 import { COLORS } from "./constants/theme";
 
-const Stack = createNativeStackNavigator();
+const Stack = createStackNavigator();
 
 export default function App() {
   return (
     <NavigationContainer>
       <Stack.Navigator initialRouteName="Inicio">
-        {/* Pantalla inicial morada con el logo */}
+        {/* Pantalla de inicio */}
         <Stack.Screen
           name="Inicio"
           component={InicioScreen}
           options={{ headerShown: false }}
         />
 
-        {/* Módulo de transporte */}
+        {/* Pantallas principales */}
         <Stack.Screen
           name="Coche"
           component={HomeScreen}
@@ -30,8 +30,6 @@ export default function App() {
             headerTintColor: "#fff",
           }}
         />
-
-        {/* Historial */}
         <Stack.Screen
           name="History"
           component={HistoryScreen}
@@ -41,8 +39,6 @@ export default function App() {
             headerTintColor: "#fff",
           }}
         />
-
-        {/* Estadísticas */}
         <Stack.Screen
           name="Stats"
           component={StatsScreen}
@@ -81,7 +77,7 @@ function InicioScreen({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: COLORS.background,
+    backgroundColor: "#5E1381", // Color exacto del logo, forzado
     alignItems: "center",
     justifyContent: "center",
     paddingHorizontal: 20,
@@ -94,7 +90,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 26,
     fontWeight: "bold",
-    color: COLORS.gold,
+    color: "#FFD700", // Dorado
     textAlign: "center",
   },
   subtitle: {
@@ -105,7 +101,7 @@ const styles = StyleSheet.create({
     marginBottom: 30,
   },
   button: {
-    backgroundColor: COLORS.gold,
+    backgroundColor: "#FFD700",
     paddingVertical: 14,
     paddingHorizontal: 40,
     borderRadius: 15,
