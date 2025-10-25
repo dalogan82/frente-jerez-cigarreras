@@ -32,7 +32,7 @@
 
     web: {
       favicon: "./assets/favicon.ico",   // el que ya creaste 💛
-      backgroundColor: "#6A038D",
+      backgroundColor: "#5E1381",
       themeColor: "#FFD700",             // dorado del logo
     },
 

@@ -1,7 +1,7 @@
 ﻿import React from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import { View, Text, Button, Image, StyleSheet, TouchableOpacity } from "react-native";
+import { View, Text, Image, StyleSheet, TouchableOpacity } from "react-native";
 import HomeScreen from "./screens/HomeScreen";
 import HistoryScreen from "./screens/HistoryScreen";
 import StatsScreen from "./screens/StatsScreen";
@@ -23,11 +23,48 @@ function InicioScreen({ navigation }) {
 
       <TouchableOpacity
         style={styles.button}
-        onPress={() => navigation.navigate("Home")}
+        onPress={() => navigation.replace("Transporte")} // ✅ Usa replace para ir al módulo principal
       >
         <Text style={styles.buttonText}>🚗 COCHE</Text>
       </TouchableOpacity>
     </View>
+  );
+}
+
+// ✅ Grupo interno de pantallas del módulo de transporte
+function TransporteNavigator() {
+  const TransporteStack = createNativeStackNavigator();
+
+  return (
+    <TransporteStack.Navigator>
+      <TransporteStack.Screen
+        name="Home"
+        component={HomeScreen}
+        options={{
+          title: "Transporte",
+          headerStyle: { backgroundColor: COLORS.background },
+          headerTintColor: "#fff",
+        }}
+      />
+      <TransporteStack.Screen
+        name="History"
+        component={HistoryScreen}
+        options={{
+          title: "Historial",
+          headerStyle: { backgroundColor: COLORS.background },
+          headerTintColor: "#fff",
+        }}
+      />
+      <TransporteStack.Screen
+        name="Stats"
+        component={StatsScreen}
+        options={{
+          title: "Estadísticas",
+          headerStyle: { backgroundColor: COLORS.background },
+          headerTintColor: "#fff",
+        }}
+      />
+    </TransporteStack.Navigator>
   );
 }
 
@@ -41,31 +78,9 @@ export default function App() {
           options={{ headerShown: false }}
         />
         <Stack.Screen
-          name="Home"
-          component={HomeScreen}
-          options={{
-            title: "Transporte",
-            headerStyle: { backgroundColor: COLORS.background },
-            headerTintColor: "#fff",
-          }}
-        />
-        <Stack.Screen
-          name="History"
-          component={HistoryScreen}
-          options={{
-            title: "Historial",
-            headerStyle: { backgroundColor: COLORS.background },
-            headerTintColor: "#fff",
-          }}
-        />
-        <Stack.Screen
-          name="Stats"
-          component={StatsScreen}
-          options={{
-            title: "Estadísticas",
-            headerStyle: { backgroundColor: COLORS.background },
-            headerTintColor: "#fff",
-          }}
+          name="Transporte"
+          component={TransporteNavigator}
+          options={{ headerShown: false }} // ✅ oculta la cabecera doble
         />
       </Stack.Navigator>
     </NavigationContainer>
@@ -75,7 +90,7 @@ export default function App() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: COLORS.background, // 💜 mismo tono del logo
+    backgroundColor: COLORS.background,
     alignItems: "center",
     justifyContent: "center",
     paddingHorizontal: 20,
