@@ -33,10 +33,8 @@ export default function TransportScreen() {
 
   useEffect(() => {
     recalc();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [tipo, disponibles]);
 
-  /** Lee último conductor para el tipo y calcula hoy/siguiente respetando disponibilidad */
   async function recalc() {
     const saved = await AsyncStorage.getItem(STORAGE_TURNOS);
     const turnos =
@@ -46,6 +44,13 @@ export default function TransportScreen() {
       tipo === "Corto" ? turnos.ultimoCorto : turnos.ultimoLargo;
 
     let startIdx = ultimo ? CONDUCTORES.indexOf(ultimo) : -1;
+
+    // 🚫 Si no hay nadie disponible, mostrar sin asignar
+    if (disponibles.length === 0) {
+      setHoyConduce(null);
+      setSiguiente(null);
+      return;
+    }
 
     // Hoy
     let i = (startIdx + 1) % CONDUCTORES.length;
@@ -77,10 +82,8 @@ export default function TransportScreen() {
     );
   }
 
-  /** Registra el desplazamiento, guarda historial y “último” y recalcula hoy/siguiente */
   async function registrarDesplazamiento() {
     try {
-      // nos aseguramos de tener el cálculo al día
       await recalc();
       if (!hoyConduce) {
         Alert.alert("Sin conductor disponible", "Activa al menos un conductor.");
@@ -88,14 +91,11 @@ export default function TransportScreen() {
       }
 
       const hoy = new Date().toISOString().split("T")[0];
-
-      // 1) Guardar en HISTORIAL
       const rawHist = await AsyncStorage.getItem(STORAGE_HISTORIAL);
       const hist = rawHist ? JSON.parse(rawHist) : [];
       hist.push({ fecha: hoy, tipo, conductor: hoyConduce });
       await AsyncStorage.setItem(STORAGE_HISTORIAL, JSON.stringify(hist));
 
-      // 2) Actualizar “último” de este tipo
       const rawTurnos = await AsyncStorage.getItem(STORAGE_TURNOS);
       const turnos = rawTurnos
         ? JSON.parse(rawTurnos)
@@ -106,9 +106,7 @@ export default function TransportScreen() {
 
       await AsyncStorage.setItem(STORAGE_TURNOS, JSON.stringify(turnos));
 
-      // 3) Recalcular hoy/siguiente tras guardar
       await recalc();
-
       Alert.alert("✅ Registrado", `Conduce: ${hoyConduce} · Tipo: ${tipo}`);
     } catch (e) {
       console.error(e);
@@ -120,7 +118,6 @@ export default function TransportScreen() {
     <ScrollView contentContainerStyle={styles.container}>
       <Text style={styles.title}>🚗 COCHE</Text>
 
-      {/* Tipo */}
       <View style={styles.box}>
         <Text style={styles.subtitle}>Tipo de desplazamiento:</Text>
         <View style={styles.row}>
@@ -139,7 +136,6 @@ export default function TransportScreen() {
         </View>
       </View>
 
-      {/* Disponibles */}
       <View style={styles.box}>
         <Text style={styles.subtitle}>Conductores disponibles:</Text>
         {CONDUCTORES.map((n) => {
@@ -148,17 +144,9 @@ export default function TransportScreen() {
             <TouchableOpacity
               key={n}
               onPress={() => toggleDisponibilidad(n)}
-              style={[
-                styles.driver,
-                { backgroundColor: on ? COLORS.purple : "#eee" },
-              ]}
+              style={[styles.driver, { backgroundColor: on ? COLORS.purple : "#eee" }]}
             >
-              <Text
-                style={{
-                  color: on ? "#fff" : COLORS.muted,
-                  fontWeight: "700",
-                }}
-              >
+              <Text style={{ color: on ? "#fff" : COLORS.muted, fontWeight: "700" }}>
                 {n} {on ? "✅" : "❌"}
               </Text>
             </TouchableOpacity>
@@ -166,7 +154,6 @@ export default function TransportScreen() {
         })}
       </View>
 
-      {/* Hoy / Siguiente */}
       <View style={styles.info}>
         <Text>
           Hoy conduce:{" "}
@@ -182,12 +169,10 @@ export default function TransportScreen() {
         </Text>
       </View>
 
-      {/* Registrar */}
       <TouchableOpacity style={styles.btnMain} onPress={registrarDesplazamiento}>
         <Text style={styles.btnMainText}>Registrar desplazamiento</Text>
       </TouchableOpacity>
 
-      {/* Accesos */}
       <View style={styles.navBtns}>
         <TouchableOpacity
           style={[styles.btnNav, { backgroundColor: COLORS.purple }]}
