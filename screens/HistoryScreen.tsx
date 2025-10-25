@@ -40,7 +40,9 @@ export default function HistoryScreen() {
           <View key={index} style={styles.card}>
             <Text style={styles.name}>{item.conductor}</Text>
             <Text style={styles.type}>Desplazamiento {item.tipo}</Text>
-            <Text style={styles.date}>{item.fecha}</Text>
+            <Text style={styles.date}>
+              {item.fecha} · {item.hora}{"\n"}IP: {item.ip ?? "—"}
+            </Text>
           </View>
         ))
       )}
@@ -81,7 +83,7 @@ const styles = StyleSheet.create({
   },
   name: { fontWeight: "bold", color: "#4B0082" },
   type: { color: "#666" },
-  date: { color: "#999", textAlign: "right" },
+  date: { color: "#999", textAlign: "right", fontSize: 12 },
   deleteBtn: {
     marginTop: 20,
     backgroundColor: "#4B0082",

@@ -21,7 +21,7 @@ const CONDUCTORES = ["Alberto", "Daniel", "Manuel", "Miguel"] as const;
 type Conductor = (typeof CONDUCTORES)[number];
 type Tipo = "Corto" | "Largo";
 
-const STORAGE_TURNOS = "ULTIMOS_CONDUCTORES"; // { ultimoCorto, ultimoLargo }
+const STORAGE_TURNOS = "ULTIMOS_CONDUCTORES";
 const STORAGE_HISTORIAL = "HISTORIAL";
 
 export default function TransportScreen() {
@@ -34,6 +34,17 @@ export default function TransportScreen() {
   useEffect(() => {
     recalc();
   }, [tipo, disponibles]);
+
+  async function obtenerIP(): Promise<string> {
+    try {
+      const resp = await fetch("https://api.ipify.org?format=json");
+      const data = await resp.json();
+      return data.ip;
+    } catch (e) {
+      console.error("No se pudo obtener IP:", e);
+      return "Desconocida";
+    }
+  }
 
   async function recalc() {
     const saved = await AsyncStorage.getItem(STORAGE_TURNOS);
@@ -90,10 +101,15 @@ export default function TransportScreen() {
         return;
       }
 
-      const hoy = new Date().toISOString().split("T")[0];
+      const ahora = new Date();
+      const fecha = ahora.toLocaleDateString();
+      const hora = ahora.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
+      const ipActual = await obtenerIP();
+
       const rawHist = await AsyncStorage.getItem(STORAGE_HISTORIAL);
       const hist = rawHist ? JSON.parse(rawHist) : [];
-      hist.push({ fecha: hoy, tipo, conductor: hoyConduce });
+
+      hist.push({ fecha, hora, tipo, conductor: hoyConduce, ip: ipActual });
       await AsyncStorage.setItem(STORAGE_HISTORIAL, JSON.stringify(hist));
 
       const rawTurnos = await AsyncStorage.getItem(STORAGE_TURNOS);
@@ -107,6 +123,7 @@ export default function TransportScreen() {
       await AsyncStorage.setItem(STORAGE_TURNOS, JSON.stringify(turnos));
 
       await recalc();
+
       Alert.alert("✅ Registrado", `Conduce: ${hoyConduce} · Tipo: ${tipo}`);
     } catch (e) {
       console.error(e);
@@ -118,6 +135,7 @@ export default function TransportScreen() {
     <ScrollView contentContainerStyle={styles.container}>
       <Text style={styles.title}>🚗 COCHE</Text>
 
+      {/* Tipo */}
       <View style={styles.box}>
         <Text style={styles.subtitle}>Tipo de desplazamiento:</Text>
         <View style={styles.row}>
@@ -136,6 +154,7 @@ export default function TransportScreen() {
         </View>
       </View>
 
+      {/* Disponibles */}
       <View style={styles.box}>
         <Text style={styles.subtitle}>Conductores disponibles:</Text>
         {CONDUCTORES.map((n) => {
@@ -144,9 +163,17 @@ export default function TransportScreen() {
             <TouchableOpacity
               key={n}
               onPress={() => toggleDisponibilidad(n)}
-              style={[styles.driver, { backgroundColor: on ? COLORS.purple : "#eee" }]}
+              style={[
+                styles.driver,
+                { backgroundColor: on ? COLORS.purple : "#eee" },
+              ]}
             >
-              <Text style={{ color: on ? "#fff" : COLORS.muted, fontWeight: "700" }}>
+              <Text
+                style={{
+                  color: on ? "#fff" : COLORS.muted,
+                  fontWeight: "700",
+                }}
+              >
                 {n} {on ? "✅" : "❌"}
               </Text>
             </TouchableOpacity>
@@ -154,6 +181,7 @@ export default function TransportScreen() {
         })}
       </View>
 
+      {/* Hoy / Siguiente */}
       <View style={styles.info}>
         <Text>
           Hoy conduce:{" "}
@@ -169,10 +197,12 @@ export default function TransportScreen() {
         </Text>
       </View>
 
+      {/* Registrar */}
       <TouchableOpacity style={styles.btnMain} onPress={registrarDesplazamiento}>
         <Text style={styles.btnMainText}>Registrar desplazamiento</Text>
       </TouchableOpacity>
 
+      {/* Accesos */}
       <View style={styles.navBtns}>
         <TouchableOpacity
           style={[styles.btnNav, { backgroundColor: COLORS.purple }]}
