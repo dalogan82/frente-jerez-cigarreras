@@ -1,19 +1,18 @@
 ﻿export const COLORS = {
-  background: "#000000",
-  brandBg: "#582C83",
-  gold: "#FFD700",
-  blue: "#3B82F6",
-  green: "#22C55E",
-  red: "#EF4444",
+  background: "#6A038D", // 💜 Fondo del logo
+  gold: "#FFD700",       // 🎺 Dorado del logo
   white: "#FFFFFF",
-  muted: "#9BA1A6"
+  muted: "#E0E0E0",
+  red: "#D32F2F",
+  green: "#4CAF50",
+  blue: "#2196F3",
 };
-export const RADIUS = 18;
-export const SPACING = 14;
+
 export const CARD = {
-  borderRadius: RADIUS,
-  padding: SPACING,
-  backgroundColor: "#121212",
-  borderWidth: 1,
-  borderColor: "#1f1f1f"
+  backgroundColor: "rgba(255, 255, 255, 0.15)",
+  padding: 16,
+  borderRadius: 12,
+  marginBottom: 12,
 };
+
+export const RADIUS = 12;

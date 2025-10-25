@@ -1,134 +1,93 @@
-﻿import React, { useRef } from "react";
+﻿import React from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import {
-  View,
-  Text,
-  TouchableWithoutFeedback,
-  Animated,
-  Image,
-  StyleSheet,
-} from "react-native";
-
+import { View, Image, Text, TouchableOpacity, StyleSheet } from "react-native";
 import HomeScreen from "./screens/HomeScreen";
 import HistoryScreen from "./screens/HistoryScreen";
 import StatsScreen from "./screens/StatsScreen";
+import { COLORS } from "./constants/theme";
 
 const Stack = createNativeStackNavigator();
 
-/* --- Pantalla fija con fondo morado y logo --- */
-function SplashScreen({ navigation }) {
-  const scaleAnim = useRef(new Animated.Value(1)).current;
-
-  const handlePressIn = () => {
-    Animated.spring(scaleAnim, {
-      toValue: 0.95,
-      useNativeDriver: true,
-    }).start();
-  };
-
-  const handlePressOut = () => {
-    Animated.spring(scaleAnim, {
-      toValue: 1,
-      useNativeDriver: true,
-    }).start();
-    navigation.navigate("Coche");
-  };
-
-  return (
-    <View style={styles.splashContainer}>
-      <Image
-        source={require("./assets/icon.png")}
-        style={styles.splashLogo}
-        resizeMode="contain"
-      />
-      <Text style={styles.splashTitle}>🎺 Frente Jerez App 🎺</Text>
-      <Text style={styles.splashSubtitle}>“Las Cigarreras”</Text>
-
-      <TouchableWithoutFeedback
-        onPressIn={handlePressIn}
-        onPressOut={handlePressOut}
-      >
-        <Animated.View style={[styles.boton, { transform: [{ scale: scaleAnim }] }]}>
-          <Text style={styles.botonTexto}>🚗 COCHE</Text>
-        </Animated.View>
-      </TouchableWithoutFeedback>
-    </View>
-  );
-}
-
-/* --- Navegación principal --- */
 export default function App() {
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName="Inicio" screenOptions={{ animation: "fade" }}>
-        <Stack.Screen name="Inicio" component={SplashScreen} options={{ headerShown: false }} />
-        <Stack.Screen name="Coche" component={HomeScreen} options={{ headerShown: false }} />
-        <Stack.Screen
-          name="Historial"
-          component={HistoryScreen}
-          options={{
-            title: "Historial de Actos",
-            headerStyle: { backgroundColor: "#800080" },
-            headerTintColor: "#fff",
-          }}
-        />
-        <Stack.Screen
-          name="Estadísticas"
-          component={StatsScreen}
-          options={{
-            title: "Estadísticas",
-            headerStyle: { backgroundColor: "#800080" },
-            headerTintColor: "#fff",
-          }}
-        />
+      <Stack.Navigator
+        initialRouteName="Inicio"
+        screenOptions={{
+          headerShown: false,
+          contentStyle: { backgroundColor: COLORS.background },
+        }}
+      >
+        <Stack.Screen name="Inicio" component={InicioScreen} />
+        <Stack.Screen name="Home" component={HomeScreen} />
+        <Stack.Screen name="History" component={HistoryScreen} />
+        <Stack.Screen name="Stats" component={StatsScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   );
 }
 
-/* --- Estilos --- */
+function InicioScreen({ navigation }: any) {
+  return (
+    <View style={styles.container}>
+      <Image
+        source={require("./assets/icon.png")}
+        style={styles.logo}
+        resizeMode="contain"
+      />
+      <Text style={styles.title}>🎺 Frente Jerez App 🎺</Text>
+      <Text style={styles.subtitle}>
+        Bienvenido a la aplicación oficial del Frente Jerez “Las Cigarreras”.
+      </Text>
+
+      <TouchableOpacity
+        style={styles.button}
+        onPress={() => navigation.navigate("Home")}
+      >
+        <Text style={styles.buttonText}>🚗 Entrar al módulo Coche</Text>
+      </TouchableOpacity>
+    </View>
+  );
+}
+
 const styles = StyleSheet.create({
-  splashContainer: {
+  container: {
     flex: 1,
-    backgroundColor: "#800080", // 💜 mismo color de fondo del logo
+    backgroundColor: COLORS.background, // 💜 fondo igual al logo
     alignItems: "center",
     justifyContent: "center",
-    paddingHorizontal: 20,
+    padding: 20,
   },
-  splashLogo: {
-    width: 240,
-    height: 240,
-    marginBottom: 25,
+  logo: {
+    width: 220, // aumenta el tamaño del logo
+    height: 220,
+    marginBottom: 30,
   },
-  splashTitle: {
-    color: "#FFD700", // dorado
-    fontSize: 24,
+  title: {
+    fontSize: 26,
+    color: COLORS.gold,
     fontWeight: "bold",
     textAlign: "center",
+    marginBottom: 10,
   },
-  splashSubtitle: {
-    color: "#fff",
-    fontSize: 18,
-    marginTop: 5,
-    fontStyle: "italic",
+  subtitle: {
+    fontSize: 16,
+    color: COLORS.white,
+    textAlign: "center",
     marginBottom: 40,
   },
-  boton: {
-    backgroundColor: "#FFD700", // dorado
+  button: {
+    backgroundColor: COLORS.gold,
     paddingVertical: 16,
-    paddingHorizontal: 36,
-    borderRadius: 14,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
-    elevation: 5,
+    paddingHorizontal: 32,
+    borderRadius: 12,
+    elevation: 3,
   },
-  botonTexto: {
-    color: "#800080",
-    fontSize: 17,
+  buttonText: {
+    color: COLORS.background,
     fontWeight: "bold",
+    fontSize: 18,
     textAlign: "center",
   },
 });

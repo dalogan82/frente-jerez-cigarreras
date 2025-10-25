@@ -106,14 +106,6 @@ export default function HomeScreen() {
       await AsyncStorage.setItem(keyHistorial, JSON.stringify([...parsedHist, nuevoRegistro]));
 
       setHoyConduce(nuevoConductor);
-      let siguiente2Idx = (siguienteIdx + 1) % CONDUCTORES.length;
-      let intentos2 = 0;
-      while (!disponibles.includes(CONDUCTORES[siguiente2Idx]) && intentos2 < CONDUCTORES.length) {
-        siguiente2Idx = (siguiente2Idx + 1) % CONDUCTORES.length;
-        intentos2++;
-      }
-      setSiguiente(CONDUCTORES[siguiente2Idx]);
-
       mostrarAviso(`✅ Conductor asignado: ${nuevoConductor}`);
     } catch (e) {
       console.error(e);
@@ -123,26 +115,6 @@ export default function HomeScreen() {
 
   return (
     <ScrollView style={{ flex: 1, backgroundColor: COLORS.background, padding: 20 }}>
-      {mensaje && (
-        <Animated.View
-          style={{
-            position: 'absolute',
-            top: 30,
-            left: 20,
-            right: 20,
-            backgroundColor: COLORS.gold,
-            borderRadius: RADIUS,
-            padding: 10,
-            opacity: fadeAnim,
-            zIndex: 99,
-          }}
-        >
-          <Text style={{ textAlign: 'center', color: '#000', fontWeight: 'bold' }}>
-            {mensaje}
-          </Text>
-        </Animated.View>
-      )}
-
       <Text
         style={{
           color: COLORS.gold,
@@ -152,77 +124,8 @@ export default function HomeScreen() {
           textAlign: 'center',
         }}
       >
-        Frente Jerez{'\n'}“Las Cigarreras”
+        🚗 Módulo Coche
       </Text>
-
-      {/* Tipo de desplazamiento */}
-      <View style={{ ...CARD, marginBottom: 20 }}>
-        <Text style={{ color: COLORS.white, fontSize: 18, marginBottom: 10 }}>
-          Tipo de desplazamiento:
-        </Text>
-        <View style={{ flexDirection: 'row', justifyContent: 'space-around' }}>
-          {['Corto', 'Largo'].map((tipo) => (
-            <TouchableOpacity
-              key={tipo}
-              onPress={() => setTipoDesplazamiento(tipo as 'Corto' | 'Largo')}
-              style={{
-                backgroundColor:
-                  tipoDesplazamiento === tipo ? COLORS.blue : '#1b1b1b',
-                padding: 10,
-                borderRadius: RADIUS,
-                width: '40%',
-              }}
-            >
-              <Text style={{ color: COLORS.white, textAlign: 'center' }}>{tipo}</Text>
-            </TouchableOpacity>
-          ))}
-        </View>
-      </View>
-
-      {/* Disponibilidad */}
-      <View style={{ ...CARD, marginBottom: 20 }}>
-        <Text style={{ color: COLORS.white, fontSize: 18, marginBottom: 10 }}>
-          Selecciona los conductores disponibles:
-        </Text>
-        {CONDUCTORES.map((nombre) => (
-          <TouchableOpacity
-            key={nombre}
-            onPress={() => toggleDisponibilidad(nombre)}
-            style={{
-              backgroundColor: disponibles.includes(nombre)
-                ? COLORS.green
-                : COLORS.red,
-              padding: 10,
-              borderRadius: RADIUS,
-              marginVertical: 4,
-            }}
-          >
-            <Text
-              style={{
-                color: '#000',
-                textAlign: 'center',
-                fontWeight: 'bold',
-              }}
-            >
-              {nombre} {disponibles.includes(nombre) ? '✅' : '❌'}
-            </Text>
-          </TouchableOpacity>
-        ))}
-      </View>
-
-      {/* Hoy conduce */}
-      <View style={{ ...CARD, alignItems: 'center', gap: 10 }}>
-        <Text style={{ color: COLORS.white, fontSize: 18 }}>
-          Hoy conduce:{' '}
-          <Text style={{ color: COLORS.green, fontWeight: 'bold' }}>
-            {hoyConduce ?? '-'}
-          </Text>
-        </Text>
-        <Text style={{ color: COLORS.white, fontSize: 16 }}>
-          Siguiente:{' '}
-          <Text style={{ color: COLORS.blue }}>{siguiente ?? '-'}</Text>
-        </Text>
-      </View>
 
       {/* Botón registrar */}
       <TouchableOpacity
@@ -231,29 +134,41 @@ export default function HomeScreen() {
           backgroundColor: COLORS.gold,
           padding: 14,
           borderRadius: RADIUS,
-          marginTop: 30,
+          marginBottom: 30,
         }}
       >
         <Text
-          style={{ textAlign: 'center', color: '#000', fontWeight: 'bold' }}
+          style={{
+            textAlign: 'center',
+            color: COLORS.background,
+            fontWeight: 'bold',
+            fontSize: 16,
+          }}
         >
           Registrar Acto
         </Text>
       </TouchableOpacity>
 
-      {/* Botones de navegación centrados */}
-      <View style={{ marginTop: 30, alignItems: 'center' }}>
+      {/* Navegación */}
+      <View style={{ alignItems: 'center' }}>
         <TouchableOpacity
           onPress={() => navigation.navigate('Stats')}
           style={{
-            backgroundColor: COLORS.blue,
+            backgroundColor: COLORS.gold,
             paddingVertical: 14,
             borderRadius: RADIUS,
             width: '80%',
             marginBottom: 16,
           }}
         >
-          <Text style={{ color: '#fff', textAlign: 'center', fontWeight: 'bold', fontSize: 16 }}>
+          <Text
+            style={{
+              color: COLORS.background,
+              textAlign: 'center',
+              fontWeight: 'bold',
+              fontSize: 16,
+            }}
+          >
             📊 Ver estadísticas
           </Text>
         </TouchableOpacity>
@@ -261,13 +176,20 @@ export default function HomeScreen() {
         <TouchableOpacity
           onPress={() => navigation.navigate('History')}
           style={{
-            backgroundColor: COLORS.green,
+            backgroundColor: COLORS.gold,
             paddingVertical: 14,
             borderRadius: RADIUS,
             width: '80%',
           }}
         >
-          <Text style={{ color: '#fff', textAlign: 'center', fontWeight: 'bold', fontSize: 16 }}>
+          <Text
+            style={{
+              color: COLORS.background,
+              textAlign: 'center',
+              fontWeight: 'bold',
+              fontSize: 16,
+            }}
+          >
             🕓 Ver historial
           </Text>
         </TouchableOpacity>

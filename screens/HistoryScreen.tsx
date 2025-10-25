@@ -23,7 +23,6 @@ export default function HistoryScreen() {
       const data = await AsyncStorage.getItem('HISTORIAL');
       if (data) {
         const parsed = JSON.parse(data);
-        // Ordenar por fecha descendente
         const ordenado = parsed.sort(
           (a: Registro, b: Registro) => new Date(b.fecha).getTime() - new Date(a.fecha).getTime()
         );
@@ -49,7 +48,7 @@ export default function HistoryScreen() {
       </Text>
 
       {historial.length === 0 ? (
-        <Text style={{ color: COLORS.muted, textAlign: 'center' }}>
+        <Text style={{ color: COLORS.white, textAlign: 'center' }}>
           No hay registros guardados todavía.
         </Text>
       ) : (
@@ -68,22 +67,19 @@ export default function HistoryScreen() {
               <Text style={{ color: COLORS.white, fontWeight: 'bold' }}>
                 {item.conductor}
               </Text>
-              <Text style={{ color: COLORS.muted, fontSize: 13 }}>
-                {item.tipo === 'Corto'
-                  ? 'Desplazamiento Corto'
-                  : 'Desplazamiento Largo'}
+              <Text style={{ color: COLORS.gold, fontSize: 13 }}>
+                {item.tipo === 'Corto' ? 'Desplazamiento Corto' : 'Desplazamiento Largo'}
               </Text>
             </View>
-            <Text style={{ color: COLORS.gold, fontSize: 13 }}>{item.fecha}</Text>
+            <Text style={{ color: COLORS.white, fontSize: 13 }}>{item.fecha}</Text>
           </View>
         ))
       )}
 
-      {/* Botón Volver */}
       <TouchableOpacity
         onPress={() => navigation.navigate('Home')}
         style={{
-          backgroundColor: COLORS.blue,
+          backgroundColor: COLORS.gold,
           padding: 14,
           borderRadius: RADIUS,
           marginTop: 30,
@@ -92,7 +88,7 @@ export default function HistoryScreen() {
         <Text
           style={{
             textAlign: 'center',
-            color: '#fff',
+            color: COLORS.background,
             fontWeight: 'bold',
             fontSize: 16,
           }}

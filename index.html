@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
+    <title>Frente Jerez App 🎺</title>
+
+    <!-- Colores y favicon -->
+    <meta name="theme-color" content="#FFD700" />
+    <link rel="icon" href="/favicon.ico" type="image/x-icon" />
+
+    <!-- Reset y estilos básicos -->
+    <style id="expo-reset">
+      html,
+      body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+        background-color: #6a038d; /* 💜 color de fondo del logo */
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+          Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+        color: white;
+        overflow: hidden;
+      }
+
+      #root {
+        display: flex;
+        height: 100%;
+        width: 100%;
+        align-items: center;
+        justify-content: center;
+        background-color: #6a038d;
+      }
+
+      /* Pequeña animación al iniciar */
+      .fade-in {
+        animation: fadeIn 1.2s ease-in;
+      }
+
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+        }
+        to {
+          opacity: 1;
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+    <noscript>
+      Debes habilitar JavaScript para ejecutar esta aplicación.
+    </noscript>
+
+    <div id="root" class="fade-in">
+      <!-- Aquí React inyectará tu app -->
+    </div>
+
+    <!-- Script principal de Expo -->
+    <script src="/_expo/static/js/web/AppEntry.js" defer></script>
+  </body>
+</html>
