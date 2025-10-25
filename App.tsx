@@ -1,11 +1,10 @@
 ﻿import React from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import { View, Text, Image, StyleSheet, TouchableOpacity } from "react-native";
+import { View, Text, Image, TouchableOpacity, StyleSheet } from "react-native";
 import HomeScreen from "./screens/HomeScreen";
 import HistoryScreen from "./screens/HistoryScreen";
 import StatsScreen from "./screens/StatsScreen";
-import { COLORS } from "./constants/theme";
 
 const Stack = createNativeStackNavigator();
 
@@ -26,16 +25,7 @@ export default function App() {
           component={HomeScreen}
           options={{
             title: "🚗 Coche",
-            headerStyle: { backgroundColor: COLORS.background },
-            headerTintColor: "#fff",
-          }}
-        />
-        <Stack.Screen
-          name="History"
-          component={HistoryScreen}
-          options={{
-            title: "🕓 Historial",
-            headerStyle: { backgroundColor: COLORS.background },
+            headerStyle: { backgroundColor: "#5E1381" },
             headerTintColor: "#fff",
           }}
         />
@@ -44,7 +34,16 @@ export default function App() {
           component={StatsScreen}
           options={{
             title: "📊 Estadísticas",
-            headerStyle: { backgroundColor: COLORS.background },
+            headerStyle: { backgroundColor: "#5E1381" },
+            headerTintColor: "#fff",
+          }}
+        />
+        <Stack.Screen
+          name="History"
+          component={HistoryScreen}
+          options={{
+            title: "🕓 Historial",
+            headerStyle: { backgroundColor: "#5E1381" },
             headerTintColor: "#fff",
           }}
         />
@@ -77,10 +76,9 @@ function InicioScreen({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#5E1381",
-    alignItems: "center",
+    backgroundColor: "#FFFFFF", // Fondo blanco
     justifyContent: "center",
-    paddingHorizontal: 20,
+    alignItems: "center",
   },
   icon: {
     width: 180,
@@ -90,18 +88,17 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 26,
     fontWeight: "bold",
-    color: "#FFD700",
+    color: "#5E1381",
     textAlign: "center",
   },
   subtitle: {
     fontSize: 18,
-    color: "#fff",
+    color: "#5E1381",
+    marginBottom: 40,
     textAlign: "center",
-    marginTop: 10,
-    marginBottom: 30,
   },
   button: {
-    backgroundColor: "#FFD700",
+    backgroundColor: "#5E1381", // 👈 Morado del logo
     paddingVertical: 14,
     paddingHorizontal: 40,
     borderRadius: 15,
@@ -112,9 +109,8 @@ const styles = StyleSheet.create({
     elevation: 5,
   },
   buttonText: {
-    color: "#5E1381",
+    color: "#FFFFFF", // 👈 Texto blanco
     fontSize: 18,
     fontWeight: "bold",
-    textAlign: "center",
   },
 });
