@@ -21,7 +21,7 @@ const CONDUCTORES = ["Alberto", "Daniel", "Manuel", "Miguel"] as const;
 type Conductor = (typeof CONDUCTORES)[number];
 type Tipo = "Corto" | "Largo";
 
-const STORAGE_TURNOS = "ULTIMOS_CONDUCTORES";
+const STORAGE_TURNOS = "ULTIMOS_CONDUCTORES"; // { ultimoCorto, ultimoLargo }
 const STORAGE_HISTORIAL = "HISTORIAL";
 
 export default function TransportScreen() {
@@ -30,9 +30,14 @@ export default function TransportScreen() {
   const [disponibles, setDisponibles] = useState<Conductor[]>([...CONDUCTORES]);
   const [hoyConduce, setHoyConduce] = useState<Conductor | null>(null);
   const [siguiente, setSiguiente] = useState<Conductor | null>(null);
+  const [estadoTurnos, setEstadoTurnos] = useState<{ corto: string | null; largo: string | null }>({
+    corto: null,
+    largo: null,
+  });
 
   useEffect(() => {
     recalc();
+    cargarTurnos();
   }, [tipo, disponibles]);
 
   async function obtenerIP(): Promise<string> {
@@ -43,6 +48,14 @@ export default function TransportScreen() {
     } catch (e) {
       console.error("No se pudo obtener IP:", e);
       return "Desconocida";
+    }
+  }
+
+  async function cargarTurnos() {
+    const saved = await AsyncStorage.getItem(STORAGE_TURNOS);
+    if (saved) {
+      const { ultimoCorto, ultimoLargo } = JSON.parse(saved);
+      setEstadoTurnos({ corto: ultimoCorto, largo: ultimoLargo });
     }
   }
 
@@ -123,6 +136,7 @@ export default function TransportScreen() {
       await AsyncStorage.setItem(STORAGE_TURNOS, JSON.stringify(turnos));
 
       await recalc();
+      await cargarTurnos();
 
       Alert.alert("✅ Registrado", `Conduce: ${hoyConduce} · Tipo: ${tipo}`);
     } catch (e) {
@@ -194,6 +208,17 @@ export default function TransportScreen() {
           <Text style={{ color: COLORS.purple, fontWeight: "800" }}>
             {siguiente ?? "-"}
           </Text>
+        </Text>
+      </View>
+
+      {/* 🔁 Estado de turnos */}
+      <View style={styles.box}>
+        <Text style={styles.subtitle}>🔁 Estado de turnos</Text>
+        <Text style={{ color: COLORS.muted }}>
+          Corto → Último: {estadoTurnos.corto ?? "-"}
+        </Text>
+        <Text style={{ color: COLORS.muted }}>
+          Largo → Último: {estadoTurnos.largo ?? "-"}
         </Text>
       </View>
 
