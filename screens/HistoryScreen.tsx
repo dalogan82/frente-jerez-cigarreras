@@ -1,101 +1,94 @@
-﻿import React, { useEffect, useState } from 'react';
-import { ScrollView, View, Text, TouchableOpacity } from 'react-native';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import { useNavigation } from '@react-navigation/native';
-import { COLORS, CARD, RADIUS } from '../constants/theme';
-
-type Registro = {
-  fecha: string;
-  tipo: 'Corto' | 'Largo';
-  conductor: string;
-};
+﻿import React, { useEffect, useState } from "react";
+import {
+  View,
+  Text,
+  ScrollView,
+  TouchableOpacity,
+  Alert,
+  StyleSheet,
+} from "react-native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import PasswordModal from "../components/PasswordModal";
 
 export default function HistoryScreen() {
-  const navigation = useNavigation();
-  const [historial, setHistorial] = useState<Registro[]>([]);
+  const [historial, setHistorial] = useState<any[]>([]);
+  const [showPwd, setShowPwd] = useState(false);
 
   useEffect(() => {
     cargarHistorial();
   }, []);
 
   async function cargarHistorial() {
-    try {
-      const data = await AsyncStorage.getItem('HISTORIAL');
-      if (data) {
-        const parsed = JSON.parse(data);
-        const ordenado = parsed.sort(
-          (a: Registro, b: Registro) => new Date(b.fecha).getTime() - new Date(a.fecha).getTime()
-        );
-        setHistorial(ordenado);
-      }
-    } catch (err) {
-      console.error('Error cargando historial:', err);
-    }
+    const data = await AsyncStorage.getItem("HISTORIAL");
+    setHistorial(data ? JSON.parse(data) : []);
+  }
+
+  async function borrarHistorial() {
+    await AsyncStorage.removeItem("HISTORIAL");
+    setHistorial([]);
+    Alert.alert("✅ Éxito", "Historial eliminado correctamente");
   }
 
   return (
-    <ScrollView style={{ flex: 1, backgroundColor: COLORS.background, padding: 16 }}>
-      <Text
-        style={{
-          color: COLORS.gold,
-          fontSize: 22,
-          fontWeight: 'bold',
-          textAlign: 'center',
-          marginBottom: 20,
-        }}
-      >
-        Historial de Actos
-      </Text>
+    <ScrollView contentContainerStyle={styles.container}>
+      <Text style={styles.title}>🕓 Historial de desplazamientos</Text>
 
       {historial.length === 0 ? (
-        <Text style={{ color: COLORS.white, textAlign: 'center' }}>
-          No hay registros guardados todavía.
-        </Text>
+        <Text style={styles.empty}>No hay registros</Text>
       ) : (
         historial.map((item, index) => (
-          <View
-            key={index}
-            style={{
-              ...CARD,
-              flexDirection: 'row',
-              justifyContent: 'space-between',
-              marginBottom: 10,
-              alignItems: 'center',
-            }}
-          >
-            <View>
-              <Text style={{ color: COLORS.white, fontWeight: 'bold' }}>
-                {item.conductor}
-              </Text>
-              <Text style={{ color: COLORS.gold, fontSize: 13 }}>
-                {item.tipo === 'Corto' ? 'Desplazamiento Corto' : 'Desplazamiento Largo'}
-              </Text>
-            </View>
-            <Text style={{ color: COLORS.white, fontSize: 13 }}>{item.fecha}</Text>
+          <View key={index} style={styles.card}>
+            <Text style={styles.name}>{item.conductor}</Text>
+            <Text style={styles.type}>Desplazamiento {item.tipo}</Text>
+            <Text style={styles.date}>{item.fecha}</Text>
           </View>
         ))
       )}
 
       <TouchableOpacity
-        onPress={() => navigation.navigate('Home')}
-        style={{
-          backgroundColor: COLORS.gold,
-          padding: 14,
-          borderRadius: RADIUS,
-          marginTop: 30,
-        }}
+        style={styles.deleteBtn}
+        onPress={() => setShowPwd(true)}
       >
-        <Text
-          style={{
-            textAlign: 'center',
-            color: COLORS.background,
-            fontWeight: 'bold',
-            fontSize: 16,
-          }}
-        >
-          ⬅️ Volver al inicio
-        </Text>
+        <Text style={styles.deleteTxt}>🧹 Eliminar historial</Text>
       </TouchableOpacity>
+
+      <PasswordModal
+        visible={showPwd}
+        onClose={() => setShowPwd(false)}
+        onSuccess={() => {
+          setShowPwd(false);
+          borrarHistorial();
+        }}
+      />
     </ScrollView>
   );
 }
+
+const styles = StyleSheet.create({
+  container: { padding: 16, backgroundColor: "#fff" },
+  title: {
+    fontSize: 20,
+    fontWeight: "bold",
+    color: "#4B0082",
+    textAlign: "center",
+    marginBottom: 16,
+  },
+  card: {
+    backgroundColor: "#F5EFFF",
+    borderRadius: 10,
+    padding: 12,
+    marginBottom: 10,
+  },
+  name: { fontWeight: "bold", color: "#4B0082" },
+  type: { color: "#666" },
+  date: { color: "#999", textAlign: "right" },
+  deleteBtn: {
+    marginTop: 20,
+    backgroundColor: "#4B0082",
+    borderRadius: 10,
+    padding: 12,
+    alignItems: "center",
+  },
+  deleteTxt: { color: "#fff", fontWeight: "bold" },
+  empty: { textAlign: "center", color: "#666", marginTop: 20 },
+});

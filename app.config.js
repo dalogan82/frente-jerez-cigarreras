@@ -1,6 +1,6 @@
 ﻿export default {
   expo: {
-    name: "FrenteJerezApp",
+    name: "Frente Jerez App",
     slug: "frente-jerez-cigarreras",
     version: "1.0.9",
     orientation: "portrait",
@@ -8,9 +8,9 @@
     userInterfaceStyle: "light",
 
     splash: {
-      image: "./assets/icon.png",        // Usa el mismo logo como splash
+      image: "./assets/splash.png",
       resizeMode: "contain",
-      backgroundColor: "#6A038D",        // 💜 fondo morado del logo
+      backgroundColor: "#ffffff",
     },
 
     assetBundlePatterns: ["**/*"],
@@ -23,17 +23,21 @@
 
     android: {
       adaptiveIcon: {
-        foregroundImage: "./assets/icon.png",
-        backgroundColor: "#6A038D",      // mismo fondo morado
+        foregroundImage: "./assets/adaptive-icon.png",
+        backgroundColor: "#ffffff",
       },
       package: "com.dalogan.frentejerezapp",
       versionCode: 1,
     },
 
     web: {
-      favicon: "./assets/favicon.ico",   // el que ya creaste 💛
-      backgroundColor: "#5E1381",
-      themeColor: "#FFD700",             // dorado del logo
+      favicon: "./assets/favicon.png", // ✅ tu favicon
+      name: "Frente Jerez App",        // ✅ nombre que sale en pestaña
+      shortName: "Frente Jerez",
+      themeColor: "#5E1381",           // morado principal del logo
+      backgroundColor: "#ffffff",      // fondo blanco
+      display: "standalone",
+      orientation: "portrait",
     },
 
     extra: {

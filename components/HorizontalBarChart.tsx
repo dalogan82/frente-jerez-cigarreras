@@ -1,50 +1,141 @@
-﻿import React from 'react';
-import { View, Text } from 'react-native';
-import { COLORS, RADIUS } from '../constants/theme';
+﻿// components/HorizontalBarChart.tsx
+
+import React from "react";
+import { View, Text } from "react-native";
+import { COLORS } from "../constants/theme";
 
 export type HBarDatum = {
   label: string;
-  normal: number;
-  desplazamiento: number;
+  normal: number; // desplazamientos cortos
+  desplazamiento: number; // desplazamientos largos
 };
 
-export default function HorizontalBarChart({ data, max }: { data: HBarDatum[]; max?: number }) {
-  const maxVal = max ?? Math.max(1, ...data.map(d => Math.max(d.normal, d.desplazamiento, d.normal + d.desplazamiento)));
+type Props = {
+  data: HBarDatum[];
+  max: number;
+};
+
+export default function HorizontalBarChart({ data, max }: Props) {
+  if (!data || data.length === 0) {
+    return (
+      <Text
+        style={{
+          color: COLORS.muted,
+          textAlign: "center",
+          marginTop: 16,
+        }}
+      >
+        No hay datos para mostrar.
+      </Text>
+    );
+  }
 
   return (
-    <View style={{ gap: 10 }}>
-      {data.map((d) => {
-        const normalPct = maxVal ? d.normal / maxVal : 0;
-        const desplPct = maxVal ? d.desplazamiento / maxVal : 0;
-        const normalWidth = `${normalPct * 100}%`;
-        const desplWidth = `${desplPct * 100}%`;
+    <View
+      style={{
+        marginTop: 20,
+        paddingVertical: 10,
+      }}
+    >
+      <Text
+        style={{
+          color: COLORS.primary,
+          fontWeight: "bold",
+          fontSize: 18,
+          marginBottom: 10,
+          textAlign: "center",
+        }}
+      >
+        Gráfico de desplazamientos
+      </Text>
+
+      {data.map((item, index) => {
+        const total = item.normal + item.desplazamiento;
+        const cortoWidth = (item.normal / max) * 100;
+        const largoWidth = (item.desplazamiento / max) * 100;
 
         return (
-          <View key={d.label} style={{ gap: 6 }}>
-            <Text style={{ color: COLORS.white }}>{d.label}</Text>
-            <View style={{ backgroundColor: '#1b1b1b', borderRadius: RADIUS, overflow: 'hidden', height: 28 }}>
-              <View style={{ flexDirection: 'row', height: '100%' }}>
-                {d.normal > 0 && <View style={{ width: normalWidth, backgroundColor: COLORS.blue }} />}
-                {d.desplazamiento > 0 && <View style={{ width: desplWidth, backgroundColor: COLORS.green }} />}
-              </View>
+          <View key={index} style={{ marginBottom: 14 }}>
+            {/* Nombre del conductor */}
+            <Text
+              style={{
+                color: COLORS.text,
+                marginBottom: 4,
+                fontWeight: "bold",
+              }}
+            >
+              {item.label}
+            </Text>
+
+            {/* Contenedor de barras */}
+            <View
+              style={{
+                flexDirection: "row",
+                height: 26,
+                backgroundColor: "#EEE",
+                borderRadius: 8,
+                overflow: "hidden",
+              }}
+            >
+              {/* Desplazamientos cortos (morado) */}
+              {item.normal > 0 && (
+                <View
+                  style={{
+                    width: `${cortoWidth}%`,
+                    backgroundColor: COLORS.primary,
+                    justifyContent: "center",
+                    alignItems: "center",
+                  }}
+                >
+                  <Text
+                    style={{
+                      color: COLORS.white,
+                      fontSize: 13,
+                      fontWeight: "bold",
+                    }}
+                  >
+                    {item.normal}
+                  </Text>
+                </View>
+              )}
+
+              {/* Desplazamientos largos (dorado) */}
+              {item.desplazamiento > 0 && (
+                <View
+                  style={{
+                    width: `${largoWidth}%`,
+                    backgroundColor: COLORS.gold,
+                    justifyContent: "center",
+                    alignItems: "center",
+                  }}
+                >
+                  <Text
+                    style={{
+                      color: COLORS.primary,
+                      fontSize: 13,
+                      fontWeight: "bold",
+                    }}
+                  >
+                    {item.desplazamiento}
+                  </Text>
+                </View>
+              )}
             </View>
-            <Text style={{ color: COLORS.muted, fontSize: 12 }}>
-              Corto: {d.normal} · Largo: {d.desplazamiento} · Total: {d.normal + d.desplazamiento}
+
+            {/* Totales numéricos debajo */}
+            <Text
+              style={{
+                marginTop: 4,
+                color: COLORS.muted,
+                fontSize: 13,
+                textAlign: "right",
+              }}
+            >
+              Total: {total}
             </Text>
           </View>
         );
       })}
-
-      <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 6 }}>
-        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-          <View style={{ width: 12, height: 12, backgroundColor: COLORS.blue, borderRadius: 2, marginRight: 6 }} />
-          <Text style={{ color: COLORS.muted, fontSize: 12 }}>Corto</Text>
-        </View>
-        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-          <View style={{ width: 12, height: 12, backgroundColor: COLORS.green, borderRadius: 2, marginRight: 6 }} />
-          <Text style={{ color: COLORS.muted, fontSize: 12 }}>Largo</Text>
-        </View>
-      </View>
     </View>
   );
 }

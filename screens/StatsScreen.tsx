@@ -1,71 +1,112 @@
-﻿import React, { useEffect, useState } from 'react';
-import { ScrollView, View, Text, TouchableOpacity, Alert } from 'react-native';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import { COLORS, CARD } from '../constants/theme';
-import HorizontalBarChart, { HBarDatum } from '../components/HorizontalBarChart';
-
-const CONDUCTORES = ['Alberto', 'Daniel', 'Manuel', 'Miguel'];
-
-type Registro = {
-  fecha: string;
-  tipo: 'Corto' | 'Largo';
-  conductor: string;
-};
+﻿import React, { useEffect, useState } from "react";
+import {
+  View,
+  Text,
+  ScrollView,
+  TouchableOpacity,
+  Alert,
+  StyleSheet,
+} from "react-native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import PasswordModal from "../components/PasswordModal";
 
 export default function StatsScreen() {
-  const [rows, setRows] = useState<HBarDatum[]>([]);
+  const [stats, setStats] = useState<any>({});
+  const [showPwd, setShowPwd] = useState(false);
 
   useEffect(() => {
-    (async () => {
-      const raw = await AsyncStorage.getItem('HISTORIAL');
-      if (!raw) return;
-      const registros: Registro[] = JSON.parse(raw);
-      const mapa: Record<string, { corto: number; largo: number }> = {};
-      CONDUCTORES.forEach((c) => (mapa[c] = { corto: 0, largo: 0 }));
-
-      registros.forEach((r) => {
-        if (r.tipo === 'Corto') mapa[r.conductor].corto++;
-        else mapa[r.conductor].largo++;
-      });
-
-      const datos: HBarDatum[] = Object.entries(mapa).map(([nombre, v]) => ({
-        label: nombre,
-        normal: v.corto,
-        desplazamiento: v.largo,
-      }));
-
-      setRows(datos);
-    })();
+    cargarDatos();
   }, []);
 
-  return (
-    <ScrollView style={{ flex: 1, backgroundColor: COLORS.background, padding: 16 }}>
-      <Text
-        style={{
-          color: COLORS.gold,
-          fontSize: 22,
-          fontWeight: 'bold',
-          marginBottom: 16,
-          textAlign: 'center',
-        }}
-      >
-        Estadísticas de Conductores
-      </Text>
+  async function cargarDatos() {
+    const hist = await AsyncStorage.getItem("HISTORIAL");
+    const datos = hist ? JSON.parse(hist) : [];
+    const resumen: any = {};
 
-      {rows.length === 0 ? (
-        <Text style={{ color: COLORS.white, textAlign: 'center' }}>
-          No hay datos registrados todavía.
-        </Text>
+    datos.forEach((r: any) => {
+      if (!resumen[r.conductor]) resumen[r.conductor] = { Corto: 0, Largo: 0 };
+      resumen[r.conductor][r.tipo]++;
+    });
+    setStats(resumen);
+  }
+
+  async function borrarTodo() {
+    await AsyncStorage.removeItem("HISTORIAL");
+    setStats({});
+    Alert.alert("✅ Éxito", "Estadísticas eliminadas correctamente");
+  }
+
+  return (
+    <ScrollView contentContainerStyle={styles.container}>
+      <Text style={styles.title}>📊 Estadísticas</Text>
+
+      {Object.keys(stats).length === 0 ? (
+        <Text style={styles.empty}>No hay datos registrados</Text>
       ) : (
-        rows.map((r) => (
-          <View key={r.label} style={{ ...CARD, flexDirection: 'row', justifyContent: 'space-between' }}>
-            <Text style={{ color: COLORS.white }}>{r.label}</Text>
-            <Text style={{ color: COLORS.gold }}>
-              Corto: {r.normal} | Largo: {r.desplazamiento}
+        Object.entries(stats).map(([nombre, val]: any) => (
+          <View key={nombre} style={styles.box}>
+            <Text style={styles.name}>{nombre}</Text>
+            <Text style={styles.data}>
+              Corto: {val.Corto} | Largo: {val.Largo} | Total:{" "}
+              {val.Corto + val.Largo}
             </Text>
+            <View style={styles.barContainer}>
+              <View
+                style={[styles.bar, { flex: val.Corto, backgroundColor: "#4B0082" }]}
+              />
+              <View
+                style={[styles.bar, { flex: val.Largo, backgroundColor: "#FFD700" }]}
+              />
+            </View>
           </View>
         ))
       )}
+
+      <TouchableOpacity
+        style={styles.deleteBtn}
+        onPress={() => setShowPwd(true)}
+      >
+        <Text style={styles.deleteTxt}>🧹 Eliminar estadísticas</Text>
+      </TouchableOpacity>
+
+      <PasswordModal
+        visible={showPwd}
+        onClose={() => setShowPwd(false)}
+        onSuccess={() => {
+          setShowPwd(false);
+          borrarTodo();
+        }}
+      />
     </ScrollView>
   );
 }
+
+const styles = StyleSheet.create({
+  container: { padding: 16, backgroundColor: "#fff" },
+  title: {
+    fontSize: 20,
+    fontWeight: "bold",
+    color: "#4B0082",
+    textAlign: "center",
+    marginBottom: 16,
+  },
+  box: { marginBottom: 14 },
+  name: { fontWeight: "bold", color: "#4B0082" },
+  data: { color: "#666", marginBottom: 4 },
+  barContainer: {
+    flexDirection: "row",
+    height: 14,
+    borderRadius: 6,
+    overflow: "hidden",
+  },
+  bar: {},
+  deleteBtn: {
+    marginTop: 20,
+    backgroundColor: "#4B0082",
+    borderRadius: 10,
+    padding: 12,
+    alignItems: "center",
+  },
+  deleteTxt: { color: "#fff", fontWeight: "bold" },
+  empty: { textAlign: "center", color: "#666", marginTop: 20 },
+});
