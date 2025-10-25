@@ -211,13 +211,16 @@ export default function TransportScreen() {
         </Text>
       </View>
 
-      {/* 🔁 Estado de turnos */}
-      <View style={styles.box}>
-        <Text style={styles.subtitle}>🔁 Estado de turnos</Text>
-        <Text style={{ color: COLORS.muted }}>
+      {/* 🔁 Estado de turnos (centrado y separado) */}
+      <View style={[styles.box, styles.turnosBox]}>
+        <View style={styles.separator} />
+        <Text style={[styles.subtitle, { textAlign: "center" }]}>
+          🔁 Estado de turnos
+        </Text>
+        <Text style={{ color: COLORS.muted, textAlign: "center" }}>
           Corto → Último: {estadoTurnos.corto ?? "-"}
         </Text>
-        <Text style={{ color: COLORS.muted }}>
+        <Text style={{ color: COLORS.muted, textAlign: "center" }}>
           Largo → Último: {estadoTurnos.largo ?? "-"}
         </Text>
       </View>
@@ -275,6 +278,18 @@ const styles = StyleSheet.create({
     backgroundColor: "#F5EFFF",
     padding: 10,
     borderRadius: 10,
+  },
+  turnosBox: {
+    alignItems: "center",
+    backgroundColor: "#F9F7FF",
+    borderRadius: 12,
+    paddingVertical: 10,
+  },
+  separator: {
+    height: 1,
+    backgroundColor: "#ddd",
+    width: "80%",
+    marginBottom: 8,
   },
   btnMain: {
     backgroundColor: COLORS.purple,
