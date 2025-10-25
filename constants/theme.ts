@@ -1,18 +1,9 @@
 ﻿export const COLORS = {
-  background: "#5E1381", // 💜 Fondo del logo
-  gold: "#FFD700",       // 🎺 Dorado del logo
+  background: "#5E1381", // 💜 mismo color del logo
+  gold: "#FFD700",
   white: "#FFFFFF",
-  muted: "#E0E0E0",
-  red: "#D32F2F",
-  green: "#4CAF50",
-  blue: "#2196F3",
+  blue: "#800080",
+  red: "#C0392B",
+  green: "#27AE60",
+  muted: "#AAAAAA",
 };
-
-export const CARD = {
-  backgroundColor: "rgba(255, 255, 255, 0.15)",
-  padding: 16,
-  borderRadius: 12,
-  marginBottom: 12,
-};
-
-export const RADIUS = 12;
